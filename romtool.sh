@@ -186,7 +186,7 @@ restart () {
 	echo "-| 3)| Limpiar directorio OUT. (Clear OUT directory)                          |"
 	echo "-| 4)| Modelo de terminal a Compil. (Sevice code name)                        |"
 	echo "-| 5)| Compilar.       (Compile)                                              |"
-  echo "-| 6)| Abrir OUT directorio.    (Open OUT directory)                          |"
+  	echo "-| 6)| Abrir OUT directorio.    (Open OUT directory)                          |"
 	echo "-|00)| Exit MaguzTool.         (Exit)                                         |"
 	echo " '----------------------------------------------------------------------------'"
   echo "-------------------------------------------------------------------------------"
