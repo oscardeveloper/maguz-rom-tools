@@ -1,8 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #
-
-
+#variables
 current=`pwd`
 
 #chmod -R 775 $sysDir
@@ -31,6 +30,33 @@ fixPytom () {
   echo "   python2 virtualenv activated"
   tput setaf 7
 }
+
+virt () {
+  if [[ -d virtualenv ]]; then
+    #statements
+    source "$current/virtualenv/bin/activate";
+    echo "  Done"
+    echo "  Virtualenv2 activado"
+  else
+    virtualenv
+  fi
+}
+virtualenv () {
+  if [[ "$(python --version | awk '{print $2}' | awk -F '.' '{print $1}')" -ne 2 ]];
+  then
+      if [[ "$(command -v 'virtualenv2')" ]]; then
+          virtualenv2 "$current/virtualenv";
+          source "$current/virtualenv/bin/activate";
+          clear
+          echo "  Done"
+          echo "  Virtualenv2 activado"
+          echo "  Move up to see details"
+      else
+          echo "Please install 'virtualenv2', or make 'python' point to python2";
+          exit 1;
+      fi
+  fi
+}
 #xxxxxxx
 syncR () {
     repo sync --force-broken --force-sync --detach --no-clone-bundle
@@ -53,7 +79,7 @@ do
 #    break
  echo "   Escogiste "$numero"gb for jack compiler"
 # echo "JACK_SERVER_VM_ARGUMENTS="-Dfile.encoding=UTF-8 -XX:+TieredCompilation -Xmx"$numero"g""
- export JACK_SERVER_VM_ARGUMENTS="-Dfile.encoding=UTF-8 -XX:+TieredCompilation -Xmx"$numero"g"
+  export JACK_SERVER_VM_ARGUMENTS="-Dfile.encoding=UTF-8 -XX:+TieredCompilation -Xmx"$numero"g"
  ./prebuilts/sdk/tools/jack-admin kill-server
  ./prebuilts/sdk/tools/jack-admin start-server
  clear
@@ -63,7 +89,7 @@ do
  echo "   Move up to see details"
     break
   else
-		echo "$numero no es un numero"
+		echo "   Please use only numbers"
 	fi
 done
 }
@@ -94,32 +120,32 @@ model () {
 
 if [ ! $2 ];
     then
-    source build/envsetup.sh
     echo    What is your device code name?
       read device
 else
       device=$2
 fi
-echo "elegiste $device"
+echo "   elegiste $device"
+source build/envsetup.sh;
 }
 
 compile () {
   logfile="$device-$(date +%Y%m%d).log"
   lunch mk_$device-userdebug && time mka bacon 2>&1 | tee $logfile
   if [ $? -eq 0 ]; then
-  printf "Build Suceeded";
-  else
+  printf "   Build Suceeded";
+    else
 tput setaf 1
   printf "   Build failed, check the log at ${logfile}\n";
 tput setaf 7
   exit 1;
   fi
-  echo -e "Stopping jack server";
+  echo -e "   Stopping jack server";
   ./prebuilts/sdk/tools/jack-admin stop-server;
   clear
   echo
   echo "   Done"
-  echo " Move up to see details"
+  echo "   Move up to see details"
 }
 
 openOut () {
@@ -130,11 +156,9 @@ openOut () {
     clear
   echo
 fi
-
 }
-
+#xxxxxxx
 checkdir () {
-
 if [[ -d  output ]]; then
  echo "--output folder found."
  echo
@@ -147,7 +171,6 @@ if [[ -d  output ]]; then
 	echo
 fi
 localMode="true" #si se culple el bloque anterior se Establece localMode a TRUE
-
 }
 #2
 extr () {
@@ -179,14 +202,15 @@ restart () {
 	echo
 	echo -e "\E[34;47m----MENU:"; tput sgr0
 	echo "  ____________________________________________________________________________ "
-	echo " |                                                                            |"
+  echo "  0000 "
+	echo " | 000                                                                        |"
   echo "-| 0)| Activate Python2 virtualen (Arch Linux).                               |"
 	echo "-| 1)| Syncronizar Repositorio. (Sync repo)                                   |"
 	echo "-| 2)| Establece JACK_SERVER_VM. (Set JACK_SERVER virtual memory)             |"
 	echo "-| 3)| Limpiar directorio OUT. (Clear OUT directory)                          |"
 	echo "-| 4)| Modelo de terminal a Compil. (Sevice code name)                        |"
 	echo "-| 5)| Compilar.       (Compile)                                              |"
-  	echo "-| 6)| Abrir OUT directorio.    (Open OUT directory)                          |"
+  echo "-| 6)| Abrir OUT directorio.    (Open OUT directory)                          |"
 	echo "-|00)| Exit MaguzTool.         (Exit)                                         |"
 	echo " '----------------------------------------------------------------------------'"
   echo "-------------------------------------------------------------------------------"
@@ -196,6 +220,8 @@ restart () {
 	read ANSWER
 	reset
 	case "$ANSWER" in
+    0000) virt ;;
+    000) virtualenv ;;
      0) fixPytom ;;
 		 1) syncR ;;
 		 2) jackVM ;;

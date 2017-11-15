@@ -29,7 +29,7 @@ rm -r package-query.tar.gz
 # yaourt installed
 
 # Install needed packages
-sudo pacman -S gcc pngquant gnupg flex bison gperf sdl wxgtk bash-completion \
+sudo pacman -S gcc gnupg flex bison gperf sdl wxgtk bash-completion \
 squashfs-tools ncurses zlib schedtool perl-switch zip \
 unzip libxslt maven tmux screen w3m python2-virtualenv bc rsync ncftp \
 ca-certificates-mozilla fakeroot
@@ -39,6 +39,7 @@ sudo pacman -S jre8-openjdk jdk8-openjdk
 sudo pacman -S gcc-multilib lib32-zlib lib32-ncurses lib32-readline
 # Disable pgp checking when installing stuff from AUR
 export MAKEPKG="makepkg --skippgpcheck"
+yaourt -S pngquant --noconfirm
 yaourt -S libtinfo5 --noconfirm
 yaourt -S lib32-ncurses5-compat-libs --noconfirm
 yaourt -S ncurses5-compat-libs --noconfirm
