@@ -46,9 +46,9 @@ yaourt -S ncurses5-compat-libs --noconfirm
 #Fix error while loading shared libraries: libncurses.so.5
 		if [[ ! -f /usr/lib/libncurses.so.5 ]]; then
 			#statements
+			echo "   fixing libncurses.so.5"
+			sleep 1
 			sudo ln -s /usr/lib/libncursesw.so.6.0 /usr/lib/libncurses.so.5
-		else
-			echo "existe"
 fi
 
 echo "All Done :'D"
