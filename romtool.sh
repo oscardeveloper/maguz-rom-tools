@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 #
 #
+#
 #variables
 current=`pwd`
 
@@ -62,6 +63,7 @@ virtualenv () {
       fi
   fi
 }
+
 #xxxxxxx
 syncR () {
     repo sync --force-broken --force-sync --detach --no-clone-bundle
