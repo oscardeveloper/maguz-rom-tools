@@ -1,11 +1,8 @@
 #!/usr/bin/env bash
-
+#
 #
 #variables
 current=`pwd`
-
-#chmod -R 775 $sysDir
-#chmod -R 775 tools
 
 # Specify colors utilized in the terminal
 normal='tput sgr0'              # White
@@ -34,9 +31,13 @@ fixPytom () {
 virt () {
   if [[ -d virtualenv ]]; then
     #statements
+    export LC_ALL="C"
     source "$current/virtualenv/bin/activate";
     echo "  Done"
-    echo "  Virtualenv2 activado"
+    echo
+    tput setaf 6
+    echo " --Virtualenv2 Activado--"
+    tput setaf 7
   else
     virtualenv
   fi
@@ -49,10 +50,14 @@ virtualenv () {
           source "$current/virtualenv/bin/activate";
           clear
           echo "  Done"
-          echo "  Virtualenv2 activado"
-          echo "  Move up to see details"
+  tput setaf 6
+          echo "  --Virtualenv2 Activado--"
+  tput setaf 7
+          echo " Move up to see details"
       else
+  tput setaf 3
           echo "Please install 'virtualenv2', or make 'python' point to python2";
+  tput setaf 7
           exit 1;
       fi
   fi
@@ -62,7 +67,9 @@ syncR () {
     repo sync --force-broken --force-sync --detach --no-clone-bundle
     clear
     echo
-    echo "  Sync Done"
+    tput setaf 6
+    echo "--Repositorio Sincronizado--"
+    tput setaf 7
     echo "  Move up to see details"
 }
 #xxxxxxx
@@ -72,24 +79,30 @@ while :
 
 do
   tput setaf 3
-	echo "   Cuanta memoria quieres asignar?:"
-  tput setaf 7
+	echo "--Cuanta memoria quieres asignar?:--"
+  tput setaf 6
 	read numero
+  tput setaf 7
 	if [[ $numero =~ $re ]];then
 #    break
- echo "   Escogiste "$numero"gb for jack compiler"
-# echo "JACK_SERVER_VM_ARGUMENTS="-Dfile.encoding=UTF-8 -XX:+TieredCompilation -Xmx"$numero"g""
+ tput setaf 6
+ echo "--Escogiste "$numero"gb for jack compiler--"
+ tput setaf 7
   export JACK_SERVER_VM_ARGUMENTS="-Dfile.encoding=UTF-8 -XX:+TieredCompilation -Xmx"$numero"g"
  ./prebuilts/sdk/tools/jack-admin kill-server
  ./prebuilts/sdk/tools/jack-admin start-server
  clear
  echo
  echo "   Done"
- echo "   jack Virtual memory set to "$numero"gb"
+ tput setaf 6
+ echo "--jack Virtual memory set to "$numero"gb--"
+ tput setaf 7
  echo "   Move up to see details"
     break
   else
+    tput setaf 1
 		echo "   Please use only numbers"
+    tput setaf 7
 	fi
 done
 }
@@ -107,26 +120,38 @@ if [[ -d out ]]; then
     make clean
 	else
     echo
-		echo "   El directorio OUT esta limpio, no es necesario limpiarlo"
+    tput setaf 6
+		echo "--El directorio OUT ya esta limpio, no es necesario limpiarlo--"
+    tput setaf 7
 	fi
 fi
 clear
   echo
-  echo "   Done"
+  tput setaf 6
+    echo "--Done--"
+  tput setaf 7
     echo " Move up to see details"
-
 }
 model () {
 
 if [ ! $2 ];
     then
-    echo    What is your device code name?
+      tput setaf 3
+    echo "--What is your device code name?--"
+    tput setaf 6
       read device
+      tput setaf 7
 else
       device=$2
 fi
-echo "   elegiste $device"
 source build/envsetup.sh;
+  clear
+  echo
+  tput setaf 6
+    echo "--Done--"
+    echo "--Elegiste el Modelo $device--"
+  tput setaf 7
+    echo "--Move up to see details"
 }
 
 compile () {
@@ -172,21 +197,22 @@ if [[ -d  output ]]; then
 fi
 localMode="true" #si se culple el bloque anterior se Establece localMode a TRUE
 }
-#2
-extr () {
 
-  if [[ condition ]]; then
-    #statements
-    xxxxxxx
+desVirt () {
+  if [[ -d "$current/virtualenv" ]]; then
+#      echo -e "   virtualenv detected, deactivating!";
+      deactivate;
+      rm -rf "$current/virtualenv";
+      echo
+      tput setaf 6
+      echo " --Virtualenv2 Desactivado--"
+      tput setaf 7
+    else
+      echo
+      tput setaf 6
+      echo " --Virtualenv2 ya esta Desactivado--"
   fi
-}
-
-empaq () {
-
-  if [[ condition ]]; then
-    #statements
-    xxxxxxx
-  fi
+      tput setaf 7
 }
 #00)
 quit () {
@@ -201,34 +227,37 @@ restart () {
 	echo "###############################################################################"
 	echo
 	echo -e "\E[34;47m----MENU:"; tput sgr0
-	echo "  ____________________________________________________________________________ "
-  echo "  0000 "
-	echo " | 000                                                                        |"
-  echo "-| 0)| Activate Python2 virtualen (Arch Linux).                               |"
-	echo "-| 1)| Syncronizar Repositorio. (Sync repo)                                   |"
-	echo "-| 2)| Establece JACK_SERVER_VM. (Set JACK_SERVER virtual memory)             |"
-	echo "-| 3)| Limpiar directorio OUT. (Clear OUT directory)                          |"
-	echo "-| 4)| Modelo de terminal a Compil. (Sevice code name)                        |"
-	echo "-| 5)| Compilar.       (Compile)                                              |"
-  echo "-| 6)| Abrir OUT directorio.    (Open OUT directory)                          |"
-	echo "-|00)| Exit MaguzTool.         (Exit)                                         |"
-	echo " '----------------------------------------------------------------------------'"
-  echo "-------------------------------------------------------------------------------"
+	echo "   ________________________________________________________________________   "
+  echo "--|   |______________________________________                                                                    |--"
+  echo "--| 1)| Activar Python2 virtualen.    |->(Arch Linux).                     |--"
+	echo "--| 2)| Syncronizar Repositorio.      |->(Sync repo)                       |--"
+	echo "--| 3)| Establece JACK_SERVER_VM.     |->(Set JACK_SERVER virtual memory)  |--"
+	echo "--| 4)| Limpiar directorio OUT.       |->(Clear OUT directory)             |--"
+	echo "--| 5)| Modelo de terminal a Compilar.|->(Device code name)                |--"
+	echo "--| 6)| Compilar.                     |->(Compile)                         |--"
+  echo "--| 7)| Desactivar Python2 virtualen. |->(Arch Linux).                     |--"
+  echo "--| 8)| Abrir OUT directorio.         |->(Open OUT directory)              |--"
+	echo "--|00)| Exit MaguzTool.               |                                    |--"
+	echo "  '------------------------------------------------------------------------'  "
+  echo "------------------------------------------------------------------------------"
   echo
   tput setaf 6
 	printf "%s" "  Enter selection: "
+  tput setaf 3
 	read ANSWER
+  tput setaf 7
 	reset
 	case "$ANSWER" in
-    0000) virt ;;
-    000) virtualenv ;;
-     0) fixPytom ;;
-		 1) syncR ;;
-		 2) jackVM ;;
-		 3) clearOut ;;
-		 4) model ;;
-		 5) compile ;;
-     6) openOut ;;
+#    0000) virt ;;
+#    000) virtualenv ;;
+     1) virt ;;
+		 2) syncR ;;
+		 3) jackVM ;;
+		 4) clearOut ;;
+		 5) model ;;
+		 6) compile ;;
+     7) desVirt ;;
+     8) openOut ;;
 		"00"|"exit")   quit ;;
 		 *)
       echo
@@ -236,11 +265,10 @@ restart () {
 		;;
 	esac
 }
-
 Start ----------------------------------------
 echo "  Starting Maguz-Rom-Tools..."
 # Terminal Dimensions
-printf '\033[8;48;80t'
+printf '\033[8;30;80t'
 #PATH="$PATH:$PWD/other"
 reset
 
