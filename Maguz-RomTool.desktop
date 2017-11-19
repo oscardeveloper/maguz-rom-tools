@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Maguz-RomTool
+GenericName=tool
+Exec=xxx1/start.sh
+Icon=xxx1/mz.png
+Terminal=true
+Type=Application
+StartupNotify=true

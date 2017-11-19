@@ -1,9 +1,17 @@
 #!/usr/bin/env bash
 #
 #
-#
+
+
 #variables
-current=`pwd`
+
+current1=`pwd`
+cd ..
+current2=`pwd`
+cd $current1
+
+echo "$current1" >> path.p
+echo "$current2" >> path.p
 
 # Specify colors utilized in the terminal
 normal='tput sgr0'              # White
@@ -17,23 +25,51 @@ white='tput setaf 7'            # White
 txtbld=$(tput bold)             # Bold
 bldred=${txtbld}$(tput setaf 1) # Bold Red
 
-
 #xxxxxxx
-fixPytom () {
-  export LC_ALL="C"
-		#virtualenv2 venv
-	source venv/bin/activate
-  echo "   Done"
-  tput setaf 6
-  echo "   python2 virtualenv activated"
-  tput setaf 7
+AccesoDir () {
+  #crear acceso directo
+  echo "  ________________________________________________________________________ "
+  echo " |                                  NOTA:                                 |"
+  echo " |                 Ingresa la ruta para el Acceso directo.                |"
+  echo " |                        Ejemplo: /home/USER/Desktop                     |"
+  echo " |________________________________________________________________________|"
+  echo
+    printf "Ruta:"
+    read INPUT
+      echo
+      echo "---Crear Acceso Directo en: "$INPUT""
+      cd $INPUT
+    if [[ ! -f Maguz-RomTool.desktop ]] ; then
+      cd $current1
+      sed -i 's.xxx1.'${current1}'.g' Maguz-RomTool.desktop
+      sed -i 's.xxx2.'${current1}'.g' Maguz-RomTool.desktop
+      sed -i 's.xxx3.'${current1}'.g' start.sh
+      cp -f Maguz-RomTool.desktop ~/.local/share/applications/
+      sudo chmod +x Maguz-RomTool.desktop
+      cp -f Maguz-RomTool.desktop $INPUT/
+      sed -i 's.'${current1}'.xxx1.g' Maguz-RomTool.desktop
+      sed -i 's.'${current1}'.xxx2.g' Maguz-RomTool.desktop
+#      sed -i 's.'${current1}'.xxx3.g' start.sh
+            echo "---Done--"
+            tput setaf 6
+        echo "---((Acceso directo creado en:$INPUT))--"
+        tput setaf 7
+        echo "---Move up to see details"
+    else
+    echo
+  #    echo -e " \e[1;31mERROR.\e[0m El Acceso Directo ya Existe en:$INPUT."
+  tput setaf 3
+      echo " ---El Acceso Directo ya existe en:$INPUT."
+      tput setaf 7
+    fi
 }
 
 virt () {
+
   if [[ -d virtualenv ]]; then
     #statements
     export LC_ALL="C"
-    source "$current/virtualenv/bin/activate";
+    source "$current2/virtualenv/bin/activate";
     echo "  Done"
     echo
     tput setaf 6
@@ -44,11 +80,12 @@ virt () {
   fi
 }
 virtualenv () {
+#  cd ..
   if [[ "$(python --version | awk '{print $2}' | awk -F '.' '{print $1}')" -ne 2 ]];
   then
       if [[ "$(command -v 'virtualenv2')" ]]; then
-          virtualenv2 "$current/virtualenv";
-          source "$current/virtualenv/bin/activate";
+          virtualenv2 "$current2/virtualenv";
+          source "$current2/virtualenv/bin/activate";
           clear
           echo "  Done"
   tput setaf 6
@@ -63,7 +100,6 @@ virtualenv () {
       fi
   fi
 }
-
 #xxxxxxx
 syncR () {
     repo sync --force-broken --force-sync --detach --no-clone-bundle
@@ -201,10 +237,10 @@ localMode="true" #si se culple el bloque anterior se Establece localMode a TRUE
 }
 
 desVirt () {
-  if [[ -d "$current/virtualenv" ]]; then
+  if [[ -d "$current2/virtualenv" ]]; then
 #      echo -e "   virtualenv detected, deactivating!";
       deactivate;
-      rm -rf "$current/virtualenv";
+      rm -rf "$current2/virtualenv";
       echo
       tput setaf 6
       echo " --Virtualenv2 Desactivado--"
@@ -230,7 +266,7 @@ restart () {
 	echo
 	echo -e "\E[34;47m----MENU:"; tput sgr0
 	echo "   ________________________________________________________________________   "
-  echo "--|   |______________________________________                                                                    |--"
+  echo "--| 0 | Crear Acceso Directo          |                                    |--"
   echo "--| 1)| Activar Python2 virtualen.    |->(Arch Linux).                     |--"
 	echo "--| 2)| Syncronizar Repositorio.      |->(Sync repo)                       |--"
 	echo "--| 3)| Establece JACK_SERVER_VM.     |->(Set JACK_SERVER virtual memory)  |--"
@@ -250,8 +286,8 @@ restart () {
   tput setaf 7
 	reset
 	case "$ANSWER" in
-#    0000) virt ;;
-#    000) virtualenv ;;
+    0000) Acc ;;
+     0) AccesoDir ;;
      1) virt ;;
 		 2) syncR ;;
 		 3) jackVM ;;
@@ -273,7 +309,6 @@ echo "  Starting Maguz-Rom-Tools..."
 printf '\033[8;30;80t'
 #PATH="$PATH:$PWD/other"
 reset
-
 # clear
 reset
 while [ "1" = "1" ] ;
